@@ -32,7 +32,6 @@ if __name__ == '__main__':
     usage = "usage: %prog [options] stationcallsigns \n 'Stationcallsigns' is a space-delimited list of station callsigns"
     parser = optparse.OptionParser(usage=usage)
     parser.add_option('-v', action="store_true", default=False, dest='verbose', help='Print debugging output')
-    parser.add_option('-m', action="store", default=False, dest='manifest_file', help='Save the manifest file to a specific location')
     options, args = parser.parse_args()
 
     if len(args) == 0:
