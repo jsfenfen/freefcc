@@ -63,7 +63,7 @@ if __name__ == '__main__':
         infile = open(csvlisting,'rb')
         # Skip the first line, but instead write it to the output file.  
         filedata = next(infile)        
-        outfile.write(filedata)
+        outfile.write('"' + filedata + '"' + "\n")
         # write the header row
         outfile.write(",".join(field_names) +"\n")
         dw = csv.DictWriter(outfile, fieldnames=field_names, restval='', extrasaction='ignore')
