@@ -43,6 +43,7 @@ if __name__ == '__main__':
     verbose = options.verbose
                     
     for this_callsign in args:
+        this_callsign = this_callsign.upper()
         printif("Processing TV station %s" % (this_callsign), verbose)
         station_data = get_data_about_callsign(this_callsign)
         printif(station_data, verbose)

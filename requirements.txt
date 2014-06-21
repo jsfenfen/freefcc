@@ -1,2 +1,4 @@
+# pdfinfo and pdftotext are required from the shell -- these are part of poppler http://poppler.freedesktop.org/
+
 BeautifulSoup
 python-dateutil
