@@ -1,7 +1,7 @@
 # get the files specified in the station_listing file, get info about them from pdfinfo, parse them with the layout option
 # and print the layout option to another file. 
 
-import optparse, csv, sys, os, re, urllib2
+import optparse, csv, sys, os, re, urllib2, subprocess
 from scrape_settings import settings
 from wrap_pdfinfo import pdfinfo
 from urlparse import urlparse
@@ -97,9 +97,14 @@ if __name__ == '__main__':
                     continue
             
             # get pdfinfo data
-            pdf_data = pdfinfo(pdf_location)
+            pdf_data = None
+            try:
+                pdf_data = pdfinfo(pdf_location)
+            except subprocess.CalledProcessError:
+                # if the file is totally broken sometimes we'll get this--just continue.
+                pass
             print pdf_data
-            # {'Tagged': 'no', 'Producer': 'ReportBuilder', 'Creator': '', 'Encrypted': 'no', 'Author': '', 'File size': '20931 bytes', 'Optimized': 'no', 'PDF version': '1.3', 'Title': '', 'Page size': '612 x 792.003 pts (letter)', 'CreationDate': 'Wed Jun  4 06:24:34 2014', 'Pages': '2'}
+            # Data should look like: {'Tagged': 'no', 'Producer': 'ReportBuilder', 'Creator': '', 'Encrypted': 'no', 'Author': '', 'File size': '20931 bytes', 'Optimized': 'no', 'PDF version': '1.3', 'Title': '', 'Page size': '612 x 792.003 pts (letter)', 'CreationDate': 'Wed Jun  4 06:24:34 2014', 'Pages': '2'}
             txt_location = TXT_DIR + fcc_id + ".txt"
             row['txt_location'] = txt_location
             if not os.path.isfile(txt_location):
@@ -109,8 +114,12 @@ if __name__ == '__main__':
                 print "Running cmd: " + cmd
                 # use the less problematic older style of shell execution; assumes access to pdftotext from whatever is getting called.
                 os.system(cmd)
+            
+            if pdf_data:
+                result_dict = dict(row.items() + pdf_data.items())
+            else:
+                result_dict = row
                 
-            result_dict = dict(row.items() + pdf_data.items())
             dw.writerow(result_dict)
         
         outfile.close()

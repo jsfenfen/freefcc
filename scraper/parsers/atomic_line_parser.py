@@ -39,17 +39,17 @@ class atomic_line_parser(object):
     def __init__(self, line_captures):
         self.line_captures = line_captures
     
-    def get_keys(self, default_dict=None):
+    def get_keys(self, default_array=None):
         """ return just the keys -- suitable for constructing a header row. """
         capture_keys = []
-        for line_capture in line_captures:
+        for line_capture in self.line_captures:
             capture_keys = capture_keys + line_capture['return_keys']
         
         # Deal with defaults--which could be existing keys or new ones.
-        if default_dict:
-            for key in default_dict:
-                if key not in capture_keys:
-                    capture_keys.append(key)
+        if default_array:
+            for val in default_array:
+                if val not in capture_keys:
+                    capture_keys.append(val)
                     
         return capture_keys
     
