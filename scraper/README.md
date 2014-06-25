@@ -29,3 +29,6 @@ The script will check if .pdf and .txt files already exist, and if so, will not 
 
 A csv file including the header row from the input csv file, as well as the data from pdfinfo will be written to MANIFEST_LOCATION - by default in manifest_files/<callsign>.csv. 
 
+## Parsers
+
+Parsers are station specific--and sometimes multiple parsers are required per station. In general these are put in /scrapers/parsers/\<CALLSIGN\>/ directories and called read_\<CALLSIGN\>.py though the -TV that sometimes appears has been cut off. In general these require some amount of curation--possibly lots and lots and lots. 
