@@ -26,22 +26,8 @@ def check_output(csvoutputfile):
             else:
                 print "Please respond y or n. "
     return True
-    
-if __name__ == '__main__':
-    
-    usage = "usage: %prog [options] stationcallsigns \n 'Stationcallsigns' is a space-delimited list of station callsigns"
-    parser = optparse.OptionParser(usage=usage)
-    parser.add_option('-v', action="store_true", default=False, dest='verbose', help='Print debugging output')
-    options, args = parser.parse_args()
 
-    if len(args) == 0:
-        print parser.print_help()
-        sys.exit()
-    
-    # We used to allow a single folder to be scraped, but that's not all that useful. 
-    process_recursively = True
-    verbose = options.verbose
-                    
+def run_scrapes(args, verbose, process_recursively):
     for this_callsign in args:
         this_callsign = this_callsign.upper()
         printif("Processing TV station %s" % (this_callsign), verbose)
@@ -68,3 +54,21 @@ if __name__ == '__main__':
             
             print "\n\n*** now printing childfiles: *****\n\n"
             print this_folder.childfiles
+
+
+if __name__ == '__main__':
+    
+    usage = "usage: %prog [options] stationcallsigns \n 'Stationcallsigns' is a space-delimited list of station callsigns"
+    parser = optparse.OptionParser(usage=usage)
+    parser.add_option('-v', action="store_true", default=False, dest='verbose', help='Print debugging output')
+    options, args = parser.parse_args()
+
+    if len(args) == 0:
+        print parser.print_help()
+        sys.exit()
+    
+    # We used to allow a single folder to be scraped, but that's not all that useful. 
+    process_recursively = True
+    verbose = options.verbose
+    
+    run_scrapes(args, verbose, process_recursively)
