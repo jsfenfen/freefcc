@@ -1,0 +1,1 @@
+- This only reads contract files. 
