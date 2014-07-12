@@ -1,9 +1,12 @@
-# Just ignore pdfs, txt files and csvs
+# Just ignore pdfs, txt files, etc
 
 *.pdf
 *.txt
 *.csv
 .DS_Store
+*.xls
+*.xlsx
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
