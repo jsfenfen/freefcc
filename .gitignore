@@ -1,5 +1,8 @@
-# Just ignore pdfs
+# Just ignore pdfs, txt files and csvs
+
 *.pdf
+*.txt
+*.csv
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
