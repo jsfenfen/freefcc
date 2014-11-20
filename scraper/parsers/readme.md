@@ -4,6 +4,10 @@ This stuff is incredibly messy, but in general the best approach is to pick only
 
 These parsers require the two scripts in the parent directory have already been run--specifically, run_scrape to get a current snapshot of files in the stations' stations.fcc.gov page, and retrieve_files to grab the files and run pdfinfo on them. The output of retrieve_files is a manifest file that's saved in a location determined by the scrape_settings.py file (also up a directory). That settings file also determines a file location for the downloaded pdfs to go, as well as the text files converted from the pdfs. 
 
+It's worth remarking on the 'snapshot' methodology employed here. While politicaladsleuth.com attempts to gather every version of every file, this pdf retrieval functions in this repo only grab what's currently available. This has positive and negative side effects. Some stations carefully remove files that have been revised. Others leave all versions up. You'll need to pay close attention to the stations' approach to this if you want to sum this data. 
+
+Another caution: order numbers, contract numbers, and revisions to both of the aforementioned are sometimes not reliable. For instance, a station may post a revised contract with a new contract number, rather than using the original contract number and adding a revision number. Also be suspicious about contract revision dates. Sometimes these are useful, and sometimes they are not. 
+
 The manifest file is generally worth a look. Image-based pdfs tend to be much bigger, and sorting the manifest file by memory per page can help show whether (and which) files are available as text-based pdfs. 
 
 The parsing scripts preserve the data in the manifest file and add columns to it. The columns are generally defined in the capture_formats.py file in each station subdirectory. 
