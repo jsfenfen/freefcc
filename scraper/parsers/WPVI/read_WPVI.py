@@ -46,13 +46,13 @@ for row in reader:
     
     this_file_types = 0
     this_file_type = ""
-    if url_fixed.find(' NAB') > 0:
+    if url_fixed.find('NAB') > 0:
         nabs +=1
         this_file_types += 1
         this_file_type = "NAB"
         print "type = nab / basefile"
         
-    elif url_fixed.find('Invoice') > 0:
+    elif url_fixed.upper().find('INVOICE') > 0:
         invoices +=1
         this_file_types += 1
         print "filename = %s original = %s" % (filename, row['file_url'])
