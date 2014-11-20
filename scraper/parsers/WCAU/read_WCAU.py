@@ -8,14 +8,14 @@ from multiline_parser import multiline_parser
 from capture_formats import line_captures
 
 # where the data on the files is
-manifest_file = "../../manifest_files/KYW-TV.csv"
+manifest_file = "../../manifest_files/WCAU.csv"
 
 infile = open(manifest_file,'rb')
 # Skip the first line, but instead write it to the output file.  
 filedata = next(infile)
 
 # where the result csv goes. Put in this dir for now.
-outfilename = "KYW_read.csv"
+outfilename = "WCAU_read.csv"
 outfile = open(outfilename, 'w')
 # write the file data row to the first line of the output file
 outfile.write(filedata)
@@ -26,9 +26,6 @@ dataheaders = reader.fieldnames
 
 parser = multiline_parser(line_captures)
 field_names = parser.get_keys(dataheaders)
-
-# also filetype
-field_names = ['filetype'] +  field_names 
 
 outfile.write(",".join(field_names) +"\n")
 dw = csv.DictWriter(outfile, fieldnames=field_names, restval='', extrasaction='ignore')
@@ -41,46 +38,33 @@ for row in reader:
     fileid = row['fcc_id']
     intid = int(fileid)
     url_fixed = row['file_url'].upper()
-    url_fixed = url_fixed.replace("%20", " ")
-    url_fixed = url_fixed.replace("%2D", "/")
+    url_fixed = url_fixed.replace('%20', ' ')
+    url_fixed = url_fixed.replace('%2D', '/')
+    url_fixed = url_fixed.replace('%28', '(')
+    url_fixed = url_fixed.replace('%29', ')')
     
-    ## This is a KYW-specific naming convention, apparently. 
-    #print "\n\n" + row['file_url']
+    
     this_file_types = 0
-    if url_fixed.find(' BASEFILE') > 0 or url_fixed.find(' NAB') > 0 or url_fixed.find(' PIQ') > 0:
+    if url_fixed.find(' NAB') > 0 or url_fixed.find(' PI ') > 0 or url_fixed.find(' PIF') > 0 or url_fixed.find('Political Inquiry') > 0:
         nabs +=1
         this_file_types += 1
-        #print "type = nab / basefile"
-        row['filetype'] = 'other'
-        dw.writerow(row)
+        print "type = nab / basefile"
         
-    if url_fixed.find(' CONTRACT') > 0 or url_fixed.find(' TRACT') > 0:
-        contracts +=1
-        this_file_types += 1
-        
-        #print "filename = %s original = %s" % (filename, row['file_url'])
-        
-        ## only parse if it's a contract
-        result = parser.process_file(filename, row)
-        result['filetype'] = 'contract'
-        dw.writerow(result)
-        
-
-    if url_fixed.find(' ORDER') > 0:
-        orders +=1
-        this_file_types += 1
-        #print "type = order"
-        row['filetype'] = 'order'
-        dw.writerow(row)
-        
-    if url_fixed.find(' INVOICE') > 0:
+    elif url_fixed.find(' INV') > 0:
         invoices +=1
         this_file_types += 1
-        row['filetype'] = 'invoice'
-        dw.writerow(row)    
+        print "filename = %s original = %s" % (filename, row['file_url'])
         
-    if this_file_types == 0:
-        print "Unknown type: %s" % url_fixed
+        ## only parse if it's a contract
+        
+        
+
+    else:
+        contracts +=1
+        this_file_types += 1
+        result = parser.process_file(filename, row)
+        dw.writerow(result)
+        
     
     # make sure we haven't tagged anything as being two types of files. 
     assert this_file_types < 2, row['file_url']
@@ -89,4 +73,3 @@ print "(contracts=%s, invoices=%s, orders=%s, nabs=%s) , total classified =  %s"
 print "total files = %s" % (total_rows)
     
     # try to figure out what kind it is. 
-    
