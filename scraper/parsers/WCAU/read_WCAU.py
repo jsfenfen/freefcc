@@ -45,12 +45,12 @@ for row in reader:
     
     
     this_file_types = 0
-    if url_fixed.find(' NAB') > 0 or url_fixed.find(' PI ') > 0 or url_fixed.find(' PIF') > 0 or url_fixed.find('Political Inquiry') > 0:
+    if url_fixed.find(' NAB') > 0 or url_fixed.find(' PI ') > 0 or url_fixed.find('/PI ') > 0 or url_fixed.find(' PIF') > 0 or url_fixed.find('/PIF') > 0 or url_fixed.find('Political Inquiry') > 0:
         nabs +=1
         this_file_types += 1
         print "type = nab / basefile"
         
-    elif url_fixed.find(' INV') > 0:
+    elif url_fixed.find(' INV') > 0 or  url_fixed.find('/INV') > 0  or url_fixed.find('2014INV') > 0:
         invoices +=1
         this_file_types += 1
         print "filename = %s original = %s" % (filename, row['file_url'])
