@@ -23,13 +23,15 @@ def read_url(url, dry_run=False):
     # read url with our headers.
     opener = urllib2.build_opener()
     opener.addheaders = [('User-agent', SCRAPER_USER_AGENT_STRING)]
-    parsed_url = urlparse(url)
-    final_url = "%s://%s%s" % (parsed_url.scheme, parsed_url.netloc, urllib2.quote(parsed_url.path))
-    
+    #parsed_url = urlparse(url)
+    #final_url = "%s://%s%s" % (parsed_url.scheme, parsed_url.netloc, urllib2.quote(parsed_url.path))
+    final_url = url
     # deal with comma issue
-    final_url = final_url.replace("%2C", ",")
-    final_url = final_url.replace("%2c", ",")
-    final_url = final_url.replace("%27", "'")
+    #final_url = final_url.replace("%2C", ",")
+    #final_url = final_url.replace("%2c", ",")
+    #final_url = final_url.replace("%27", "'")
+    #final_url = final_url.replace("%20", " ")
+    #final_url = final_url.replace("%2D", "/")
     
     #print("trying to read url: %s" % (final_url))
     page = None
@@ -72,8 +74,13 @@ if __name__ == '__main__':
         for row in reader:
             if not row['file_url']:
                 continue
+            
+            searchable_url = row['file_url']
+            searchable_url = searchable_url.replace("%28", "(")
+            searchable_url = searchable_url.replace("%29", ")")
+
             print "handling row " + str(row)
-            fcc_id = re.search(fcc_infile_identifier, row['file_url']).group(1)
+            fcc_id = re.search(fcc_infile_identifier, searchable_url).group(1)
             pdf_location = PDF_DIR + fcc_id + ".pdf"
             
             row['callsign'] = this_callsign

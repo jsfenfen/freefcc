@@ -38,17 +38,20 @@ for row in reader:
     fileid = row['fcc_id']
     intid = int(fileid)
     url_fixed = row['file_url'].upper()
+    url_fixed = url_fixed.replace("%20", "+")
+    url_fixed = url_fixed.replace("%2D", "+")
     
+    #print url_fixed
     ## This is a KYW-specific naming convention, apparently. 
     #print "\n\n" + row['file_url']
     this_file_types = 0
     # THESE AREN'T REALLY ALL NABS, BUT WE'RE NOT GONNA PROCESS THEM
-    if url_fixed.find('-REQUEST') > 0 or url_fixed.find('-NAB') > 0 or url_fixed.find('-CHECKLIST') > 0 or url_fixed.find('-LOA') > 0 or url_fixed.find('-CERTIFICATION') > 0:
+    if url_fixed.find('REQUEST') > 0 or url_fixed.find('CHECKLIST') > 0 or url_fixed.find('LOA') > 0 or url_fixed.find('CERTIFICATION') > 0:
         nabs +=1
         this_file_types += 1
         #print "type = nab / basefile"
         
-    if url_fixed.find('-CONTRACT') > 0 or url_fixed.find('-TRACT') > 0:
+    if url_fixed.find('CONTRACT') > 0 or url_fixed.find('TRACT') > 0:
         contracts +=1
         this_file_types += 1
         #print "type = contract"
@@ -60,11 +63,14 @@ for row in reader:
         
 
     if this_file_types == 0:
-        print "Unknown type: %s" % row['file_url']
+        pass
+        #print "Unknown type: %s" % row['file_url']
     
     # make sure we haven't tagged anything as being two types of files. 
-    assert this_file_types < 2, row['file_url']
-            
+    if (this_file_types  > 1 ): 
+        print "Found multi part %s" % (url_fixed)
+        
+        
 print "(contracts=%s, invoices=%s, orders=%s, nabs=%s) , total classified =  %s" % (contracts, invoices, orders, nabs, (contracts + invoices + orders + nabs) )
 print "total files = %s" % (total_rows)
     

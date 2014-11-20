@@ -44,6 +44,8 @@ for row in reader:
     fileid = row['fcc_id']
     intid = int(fileid)
     url_fixed = row['file_url'].upper()
+    url_fixed = url_fixed.replace("%20", " ")
+    url_fixed = url_fixed.replace("%2D", "/")
     
     ## This is a KYW-specific naming convention, apparently. 
     #print "\n\n" + row['file_url']

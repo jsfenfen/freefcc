@@ -35,8 +35,16 @@ class multiline_parser(object):
     def get_keys(self, default_array=None):
         """ return just the keys -- suitable for constructing a header row. """
         capture_keys = []
+        capture_key_hash = {}
         for line_capture in self.line_captures:
-            capture_keys = capture_keys + line_capture['return_keys']
+            for key in line_capture['return_keys']:
+                #print "processing %s" % (key)
+                try:
+                    capture_key_hash[key]
+                except KeyError:
+                    capture_keys.append(key)
+                    capture_key_hash[key] = 1
+                    
         
         # Deal with defaults--which could be existing keys or new ones.
         if default_array:
@@ -84,7 +92,7 @@ class multiline_parser(object):
                 for i in range(0,capture['num_values']):
                     return_key = capture['return_keys'][i]
                     return_value = capture['results'][i]
-                    return_dict[return_key] = return_value
+                    return_dict[return_key] = return_value.strip(' ')
         
                 
         return return_dict

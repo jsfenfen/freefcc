@@ -36,9 +36,12 @@ for row in reader:
     filename = "../../" + row['txt_location']
     fileid = row['fcc_id']
     intid = int(fileid)
-    if intid < 13886716046591:
+    
+    # there are two styles of forms -- this is adjusted on a case-by-case basis
+    if ( intid  < 14037030612510 or intid in [14037241509178, 14037241836964, 14037237369948, 14037241958930, 14037960869016, 14037956506019] ):
         result = oldparser.process_file(filename, row)
     else:
+        
         result = parser.process_file(filename, row)
     dw.writerow(result)
     #print result
